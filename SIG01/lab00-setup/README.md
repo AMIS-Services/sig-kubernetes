@@ -16,17 +16,10 @@ So for both options you need a recent laptop with a minimum of 8GB of RAM.
 
 For the second option you need to have VirtualBox and Vagrant installed: 
 
-[VirtualBox 5.2.24]: https://www.virtualbox.org/wiki/Download_Old_Builds_5_2
-
-[Vagrant 2.2.3]: https://www.vagrantup.com/downloads.html
-
-
+* VirtualBox 5.2.24: https://www.virtualbox.org/wiki/Download_Old_Builds_5_2
+* Vagrant 2.2.3: https://www.vagrantup.com/downloads.html
 
 ## Setup environment
 
-1. [Setup natively on Windows 10]: setupNativeWIN10.md
-
-2. [Setup using vagrant + Ubuntu]: InstallationMinikubeViaVagrantWorkShop.docx
-
-
-
+1. Lab 1a: [Setup natively on Windows 10](setupNativeWIN10.md)
+2. Lab 1b: [Setup using vagrant + Ubuntu](InstallationMinikubeViaVagrantWorkShop.docx)
