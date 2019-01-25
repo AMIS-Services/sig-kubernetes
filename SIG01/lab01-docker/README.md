@@ -1,2 +1,3 @@
-# Lab 01 Docker
-Kubernetes SIG Docker lab
+# Docker Labs
+Kubernetes SIG Docker labs
+

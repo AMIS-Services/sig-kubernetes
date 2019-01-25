@@ -1,2 +1,3 @@
-# Lab 03 Helm
-Kubernetes SIG Helm lab
+# Helm Labs
+Kubernetes SIG Helm labs
+

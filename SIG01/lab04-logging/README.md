@@ -1,2 +1,2 @@
-# Lab 04 Logging
-Kubernetes SIG logging lab
+# Logging Labs
+Kubernetes SIG logging labs
