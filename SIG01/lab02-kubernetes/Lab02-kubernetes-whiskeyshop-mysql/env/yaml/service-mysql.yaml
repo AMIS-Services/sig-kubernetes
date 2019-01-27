@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-service
+  namespace: nl-amis-development
+  labels:
+    app: mysql
+    version: "1.0"
+    environment: development
+spec:
+  selector:
+    app: mysql
+    version: "1.0"
+    environment: development
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None

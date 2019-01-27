@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whiskeyshop
+  namespace: nl-amis-development
+  labels:
+    app: whiskeyshop
+    version: "1.0"
+    environment: development
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: whiskeyshop
+      version: "1.0"
+      environment: development
+  template:
+    metadata:
+      labels:
+        app: whiskeyshop
+        version: "1.0"
+        environment: development
+    spec:
+      containers:
+      - name: whiskeyshop-container
+        image: whiskeyshop:v1.0
+        ports:
+        - containerPort: 8080

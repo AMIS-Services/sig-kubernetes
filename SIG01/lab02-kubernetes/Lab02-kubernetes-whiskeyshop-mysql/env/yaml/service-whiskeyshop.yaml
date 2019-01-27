@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: whiskeyshop-service
+  namespace: nl-amis-development
+  labels:
+    app: whiskeyshop
+    version: "1.0"
+    environment: development
+spec:
+  selector:
+    app: whiskeyshop
+    version: "1.0"
+    environment: development
+  type: NodePort
+  ports:
+  - protocol: TCP
+    nodePort: 31580
+    port: 8180
+    targetPort: 8080
