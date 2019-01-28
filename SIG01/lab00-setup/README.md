@@ -21,5 +21,5 @@ For the second option you need to have VirtualBox and Vagrant installed:
 
 ## Setup environment
 
-1. Lab 1a: [Setup natively on Windows 10](setupNativeWIN10.md)
+1. Lab 1a: [Setup natively on Windows 10](setupNativeWIN10.md) ([pdf](setupNativeWIN10.pdf))
 2. Lab 1b: [Setup using vagrant + Ubuntu](InstallationMinikubeViaVagrantWorkShop.docx)
