@@ -201,5 +201,69 @@ On cloud providers that support load balancers, an external IP address would be 
 
 
 
+### Starting the kubernetes dashboard
 
+Kubernetes has a standard dashboard we can deploy to see what is running on the cluster. When using minikube this dashboard is already available out-of-the-box. Start the dashboard by issuing the following command `minikube dashboard`. 
 
+```%shell
+$> minikube dashboard
+
+Enabling dashboard ...
+Verifying dashboard health ...
+Launching proxy ...
+Verifying proxy health ...
+Opening http://127.0.0.1:56817/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/ in your default browser...
+```
+
+Which if everything goes in order a browser opens the dashboard page, as shown as the image below.
+
+![](images\dashboard.png)
+
+Go and take a look around to see if you can find more details about the hello-nginx deployment/service.
+
+### Adding more dashboard functionality
+
+Minikube has a set of built in addons that can be used enabled, disabled, and opened inside of the local k8s environment. Minikube must be running for these commands to take effect.
+
+1. See all addons for minikube using command `minikube addons list`:
+
+```shell
+$> minikube addons list
+
+- registry: disabled
+- registry-creds: disabled
+- freshpod: disabled
+- addon-manager: enabled
+- dashboard: enabled
+- heapster: disabled
+- efk: disabled
+- ingress: disabled
+- default-storageclass: enabled
+- storage-provisioner: enabled
+- storage-provisioner-gluster: disabled
+- nvidia-driver-installer: disabled
+- nvidia-gpu-device-plugin: disabled
+```
+
+One interesting addon is heapster. After enabling heapster you can inspect the health of your environment in much more detail (CPU, Memory, Network usage).
+
+2. Enable heapster addon using command `minikube addons enable heapster`:
+
+   ```shell
+   $> minikube addons enable heapster
+   
+   heapster was successfully enabled
+   ```
+
+3. Open heapster in browser using command `minikube addons open heapster`:
+
+   ```shell
+   # This will open grafana (interacting w/ heapster) in the browser
+   ```
+
+The following image shows graphics collected from pods:
+![image](images\heapster.png)
+
+# Conclusion
+
+In this lab you got started around with Kubernetes. If you want to play some more you can look at our [Kubernetes Cheat Sheet](kubectl-commands-cheat-sheet.pdf).
