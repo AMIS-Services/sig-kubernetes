@@ -1,0 +1,51 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: hello-node
+  name: hello-node
+  namespace: logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: hello-node
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: hello-node
+    spec:
+      containers:
+      - image: hello-node:1.1
+        imagePullPolicy: IfNotPresent
+        name: hello-node
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: hello-node
+  name: hello-node
+  namespace: logging
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: hello-node
+  type: LoadBalancer
