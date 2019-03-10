@@ -56,7 +56,7 @@ Type:
 
 ```
 kubectl create namespace logging
-kubectl create -f .\elastic.yaml -n logging --saveconfig
+kubectl create -f .\elastic.yaml -n logging --save-config=true
 kubectl get pods -n logging
 ```
 
@@ -85,7 +85,7 @@ Now we will add Kibana to the cluster.
 Type:
 
 ```
-kubectl create -f .\kibana.yaml -n logging --saveconfig
+kubectl create -f .\kibana.yaml -n logging --save-config=true
 kubectl get service -n logging
 kubectl get pods -n logging
 ```
@@ -164,7 +164,7 @@ Next we will build a new Docker container using this daemon (and this will add t
 Type:
 
 ```
-docker build -t hello-node:1.1 .
+docker build -t hello-node:1.0 .
 ```
 
 *You can use a different version, but it should match the version in the hello-node.yml file.*
@@ -172,7 +172,7 @@ docker build -t hello-node:1.1 .
 We can test the created container locally by typing:
 
 ```
-docker run --rm hello-node:1.1
+docker run --rm hello-node:1.0
 ```
 
 This will start the Node.js/Express application and will about a log message.
@@ -190,7 +190,7 @@ Stop the running application using ctrl+c (this will also remove the Docker cont
 Now deploy the application to the Minikube cluster:
 
 ```
- kubectl apply -f .\hello-node.yml
+kubectl apply -f .\hello-node.yml
 ```
 
 Check that a new service is added:
@@ -224,7 +224,7 @@ Next we will add Filebeat.
 Navigate back to the `yaml` folder and type:
 
 ```
-kubectl create -f .\filebeat.yaml
+kubectl create -f .\filebeat.yaml --save-config=true
 ```
 
 
@@ -266,7 +266,7 @@ The way to fix this is to place Logstash in between.
 Let's start by deploying logstash to our Kubernetes cluster:
 
 ```
-kubectl create -f .\logstash.yaml
+kubectl create -f .\logstash.yaml --save-config=true
 ```
 
 Wait until logstash is deployed:
@@ -278,11 +278,77 @@ kubectl get pods -n logging
 
 Now we need to change the output from Filebeat from directly sending to Elasticsearch to sending it to Logstash.
 
-Open the `filebeat.yaml` and disable the output to Elasticsearch and check that the output to Logstash is enabled.
+Open the `filebeat.yaml` and disable the output to Elasticsearch and check that the output to Logstash is enabled:
 
-All the messages which earlier went to Filebeat and can be seen using the `filebeat-*` index pattern, but now the same messages are seen using the `logstash-*` index pattern.
+```
+...
+data:
+  filebeat.yml: |-
+    filebeat.config:
+      inputs:
+        # Mounted `filebeat-inputs` configmap:
+        path: ${path.config}/inputs.d/*.yml
+        # Reload inputs configs as they change:
+        reload.enabled: false
+      modules:
+        path: ${path.config}/modules.d/*.yml
+        # Reload module configs as they change:
+        reload.enabled: false
+    filebeat.inputs:
+    - type: log
+      enabled: true
+      paths:
+        - /var/log/*.log
+    #  - logstash-tutorial.log
+    output.logstash:
+      hosts: ["logstash.logging:5044"]
 
-Perform some calls to the hello-node rest service and check if you can find them using Kibana.
+    # To enable hints based autodiscover, remove `filebeat.config.inputs` configuration and uncomment this:
+    #filebeat.autodiscover:
+    #  providers:
+    #    - type: kubernetes
+    #      hints.enabled: true
+
+    processors:
+      - add_cloud_metadata:
+
+    #cloud.id: ${ELASTIC_CLOUD_ID}
+    #cloud.auth: ${ELASTIC_CLOUD_AUTH}
+
+    #output.elasticsearch:
+    #  hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
+    #  username: ${ELASTICSEARCH_USERNAME}
+    #  password: ${ELASTICSEARCH_PASSWORD}
+...
+```
+
+Save the file and apply the changes:
+
+```
+kubectl apply -f .\filebeat.yaml
+```
+
+Perform some calls to the hello-node rest service and check if you can still find them using Kibana.
 
 You can perform queries on the Discover tab. Add some filters so you only see the messages from the hello-node service.
+
+### Filtering / enhancing logging
+
+Within the logstash configuration we can add a filter component to extract information from the message into separate tags.
+
+Uncomment the sample in the `logstash.yml` file and apply the changes.
+
+```
+   filter {
+      grok {
+        match => {
+          "message" => "\[%{GREEDYDATA:timestamp}\]\ \[%{WORD:loglevel}\]\ %{WORD:logtype}\ -\ %{GREEDYDATA:msg}"
+        }
+      }
+    }
+```
+
+Perform some new requests on the hello-node rest api and check the results in Kibana.
+
+See http://grokconstructor.appspot.com if you want some help constructing grok match expressions.
 

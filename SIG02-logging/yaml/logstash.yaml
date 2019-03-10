@@ -16,17 +16,15 @@ data:
     #filter {
     #  grok {
     #    match => {
-    #      "message" => "\[%{GREEDYDATA:timestamp}\]\ \[%{WORD:loglevel}\]\ %{WORD:logtype}\ -\ %{GREEDYDATA:message}"
+    #      "message" => "\[%{GREEDYDATA:timestamp}\]\ \[%{WORD:loglevel}\]\ %{WORD:logtype}\ -\ %{GREEDYDATA:msg}"
     #    }
     #  }
     #}
     output {
       elasticsearch {
         hosts => "elasticsearch.logging:9200"
-        # sniffing => false
-        # manage_template => false
-        # index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
-        index => "beat-logstash-%{+YYYY.MM.dd}"
+        sniffing => true
+        index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
       }
     }
   logstash.yml: |-
@@ -63,13 +61,13 @@ spec:
         args:
         - -f
         - /usr/share/logstash/pipeline/logstash.conf
-        resources:
-          limits:
-            memory: 2Gi
-            cpu: "200m"
-          requests:
-            memory: 2Gi
-            cpu: "200m"
+        #resources:
+        #  limits:
+        #    memory: 2Gi
+        #    cpu: "200m"
+        #  requests:
+        #    memory: 2Gi
+        #    cpu: "200m"
       volumes:
       - name: pipeline
         configMap:
