@@ -7,16 +7,26 @@ metadata:
 data:
   logstash.conf: |-
     input {
-      tcp {
+      beats {
         port => 5044
-        codec => "json"
       }
     }
+    # The filter part of this file is commented out to indicate that it
+    # is optional.
+    #filter {
+    #  grok {
+    #    match => {
+    #      "message" => "\[%{GREEDYDATA:timestamp}\]\ \[%{WORD:loglevel}\]\ %{WORD:logtype}\ -\ %{GREEDYDATA:message}"
+    #    }
+    #  }
+    #}
     output {
       elasticsearch {
         hosts => "elasticsearch.logging:9200"
-        index => "logstash-%{+YYYY.MM.dd}"
-        sniffing => false
+        # sniffing => false
+        # manage_template => false
+        # index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+        index => "beat-logstash-%{+YYYY.MM.dd}"
       }
     }
   logstash.yml: |-
