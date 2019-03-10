@@ -253,3 +253,36 @@ Click on Discover and select the new index pattern.
 
 You can use filters to query the data.
 
+Call the hello-node API several times and see if you can find the entries in the logging.
+
+
+
+### Logstash
+
+As we see, there are a lot of messages coming from Filebeat.
+
+The way to fix this is to place Logstash in between.
+
+Let's start by deploying logstash to our Kubernetes cluster:
+
+```
+kubectl create -f .\logstash.yaml
+```
+
+Wait until logstash is deployed:
+
+```
+kubectl get deployments -n logging
+kubectl get pods -n logging
+```
+
+Now we need to change the output from Filebeat from directly sending to Elasticsearch to sending it to Logstash.
+
+Open the `filebeat.yaml` and disable the output to Elasticsearch and check that the output to Logstash is enabled.
+
+All the messages which earlier went to Filebeat and can be seen using the `filebeat-*` index pattern, but now the same messages are seen using the `logstash-*` index pattern.
+
+Perform some calls to the hello-node rest service and check if you can find them using Kibana.
+
+You can perform queries on the Discover tab. Add some filters so you only see the messages from the hello-node service.
+
