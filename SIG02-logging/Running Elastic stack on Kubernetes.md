@@ -233,13 +233,13 @@ Open Kibana and check if there filebeat entries in Elasticsearch.
 
 Go the home page by clicking on the Kibana logo and select Index Patterns.
 
-![](img\kibana_index_patterns.png)
+![](img/kibana_index_patterns.png)
 
 Press Create index pattern.
 
 You will see already that there is a filebeat-... index suggestion.
 
-![](img\kibana_create_index_pattern.png)
+![](img/kibana_create_index_pattern.png)
 
 Enter as index pattern: filebeat-*
 
