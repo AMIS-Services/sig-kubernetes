@@ -22,7 +22,7 @@ spec:
         run: hello-node
     spec:
       containers:
-      - image: hello-node:1.1
+      - image: hello-node:1.0
         imagePullPolicy: IfNotPresent
         name: hello-node
         ports:
