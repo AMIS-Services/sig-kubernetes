@@ -9,11 +9,17 @@ logger.level = 'debug';
 log4js.configure({
   appenders: {
     console: {
-      type: 'console'
+      type: 'console',
+      layout: {
+        type: "basic"
+      }
     },
     applog: { 
       type: 'file', 
-      filename: 'applog.log' 
+      filename: 'applog.log',
+      layout: {
+        type: "basic"
+      } 
     },
     logstash: {
       host: "logstash.logging",
@@ -23,7 +29,7 @@ log4js.configure({
         server: os.hostname()
       },
       layout: {
-        type: "pattern",
+        type: "basic",
         pattern: "%m"
       },
       category: "debugging"
