@@ -23,14 +23,15 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: 500m
-            memory: 4Gi
-          requests:
-            cpu: 500m
-            memory: 4Gi
-
+            cpu: 2
+        volumeMounts:
+          - name: storage
+            mountPath: /data
+      volumes:
+        - emptyDir:
+            medium: ""
+          name: "storage"
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
