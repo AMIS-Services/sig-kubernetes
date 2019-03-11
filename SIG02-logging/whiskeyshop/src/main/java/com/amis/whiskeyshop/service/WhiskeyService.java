@@ -30,7 +30,7 @@ public class WhiskeyService {
             whiskeyRepository.findAll().forEach(whiskeys::add);
             LOG.info("All whiskeys retrieved.");
         } else {
-            LOG.error("An error occurred when retrieving whiskey's", new IOException("Database not available"));
+            LOG.error("An error occurred when retrieving all whiskey's");
         }
         return whiskeys;
     }
@@ -41,7 +41,7 @@ public class WhiskeyService {
             whiskeyRepository.findById(id);
             LOG.info("Got whiskey {}", id);
         } else {
-            LOG.error("An error occurred when retrieving whiskey {}", id, new IOException("Database not available"));
+            LOG.error("An error occurred when retrieving whiskey {}", id);
         }
         return result;
     }
@@ -51,7 +51,7 @@ public class WhiskeyService {
             whiskeyRepository.save(whiskey);
             LOG.info("Added new whiskey {}", whiskey.getId());
         } else {
-            LOG.error("An error occurred when adding whiskey {}", whiskey.getId(), new IOException("Database not available"));
+            LOG.error("An error occurred when adding whiskey {}", whiskey.getId());
         }
     }
 
@@ -60,7 +60,7 @@ public class WhiskeyService {
             whiskeyRepository.save(whiskey);
             LOG.info("Updated whiskey {}", id);
         } else {
-            LOG.error("An error occurred when updating whiskey {}", id, new IOException("Database not available"));
+            LOG.error("An error occurred when updating whiskey {}", id);
         }
     }
 
@@ -69,7 +69,7 @@ public class WhiskeyService {
             whiskeyRepository.deleteById(id);
             LOG.info("Deleted whiskey {}", id);
         } else {
-            LOG.error("An error occurred when deleting whiskey {}", id, new IOException("Database not available"));
+            LOG.error("An error occurred when deleting whiskey {}", id);
         }
     }
 
